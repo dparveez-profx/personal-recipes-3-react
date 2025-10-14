@@ -9,7 +9,7 @@ function RecipePage({ recipeSlug, onBackClick }) {
   const [isFavorite, setIsFavorite] = useState(false);
 
   useEffect(() => {
-    const storedFavorites = localStorage.getItem('favoriteRecipes');
+    const storedFavorites = sessionStorage.getItem('favoriteRecipes');
     if (storedFavorites && recipe) {
       const favorites = JSON.parse(storedFavorites);
       setIsFavorite(favorites.includes(recipe.id));
@@ -21,7 +21,7 @@ function RecipePage({ recipeSlug, onBackClick }) {
   }, [recipeSlug]);
 
   useEffect(() => {
-    if (recipe && recipe.images.length > 1) {
+    if (recipe) {
       const interval = setInterval(() => {
         setFadeClass('fade-out');
         setTimeout(() => {
@@ -53,7 +53,7 @@ function RecipePage({ recipeSlug, onBackClick }) {
   };
 
   const toggleFavorite = () => {
-    const storedFavorites = localStorage.getItem('favoriteRecipes');
+    const storedFavorites = sessionStorage.getItem('favoriteRecipes');
     let favorites = storedFavorites ? JSON.parse(storedFavorites) : [];
     
     if (isFavorite) {
@@ -62,7 +62,7 @@ function RecipePage({ recipeSlug, onBackClick }) {
       favorites.push(recipe.id);
     }
     
-    localStorage.setItem('favoriteRecipes', JSON.stringify(favorites));
+    sessionStorage.setItem('favoriteRecipes', JSON.stringify(favorites));
     setIsFavorite(!isFavorite);
   };
 
@@ -105,27 +105,25 @@ function RecipePage({ recipeSlug, onBackClick }) {
             alt={`${recipe.title} ${currentImageIndex + 1}`}
             className={`recipe-image ${fadeClass}`}
           />
-          {recipe.images.length > 1 && (
-            <>
-              <button
-                className="image-nav-button prev"
-                onClick={handlePrevImage}
-                aria-label="Previous image"
-              >
-                ‹
-              </button>
-              <button
-                className="image-nav-button next"
-                onClick={handleNextImage}
-                aria-label="Next image"
-              >
-                ›
-              </button>
-              <div className="image-counter">
-                {currentImageIndex + 1} / {recipe.images.length}
-              </div>
-            </>
-          )}
+          <>
+            <button
+              className="image-nav-button prev"
+              onClick={handlePrevImage}
+              aria-label="Previous image"
+            >
+              ‹
+            </button>
+            <button
+              className="image-nav-button next"
+              onClick={handleNextImage}
+              aria-label="Next image"
+            >
+              ›
+            </button>
+            <div className="image-counter">
+              {currentImageIndex + 1} / {recipe.images.length}
+            </div>
+          </>
         </div>
       </div>
 

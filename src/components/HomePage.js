@@ -7,7 +7,7 @@ function HomePage({ onRecipeClick }) {
   const [favorites, setFavorites] = useState([]);
 
   useEffect(() => {
-    const storedFavorites = localStorage.getItem('favoriteRecipes');
+    const storedFavorites = sessionStorage.getItem('favoriteRecipes');
     if (storedFavorites) {
       setFavorites(JSON.parse(storedFavorites));
     }
@@ -21,8 +21,18 @@ function HomePage({ onRecipeClick }) {
       newFavorites = [...favorites, recipeId];
     }
     setFavorites(newFavorites);
-    localStorage.setItem('favoriteRecipes', JSON.stringify(newFavorites));
+    sessionStorage.setItem('favoriteRecipes', JSON.stringify(newFavorites));
   };
+
+  // Sort recipes: favorited ones first, then the rest
+  const sortedRecipes = [...recipes].sort((a, b) => {
+    const aIsFavorite = favorites.includes(a.id);
+    const bIsFavorite = favorites.includes(b.id);
+    
+    if (aIsFavorite && !bIsFavorite) return 1;
+    if (!aIsFavorite && bIsFavorite) return -1;
+    return 0;
+  });
 
   return (
     <div className="home-page">
@@ -31,7 +41,7 @@ function HomePage({ onRecipeClick }) {
         <p>Delicious recipes from my kitchen to yours</p>
       </header>
       <div className="recipe-grid">
-        {recipes.map(recipe => (
+        {sortedRecipes.map(recipe => (
           <RecipeCard
             key={recipe.id}
             recipe={recipe}

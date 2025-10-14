@@ -6,22 +6,19 @@ function RecipeCard({ recipe, isFavorite, onToggleFavorite, onClick }) {
   const [fadeClass, setFadeClass] = useState('fade-in');
 
   useEffect(() => {
-    if (recipe.images.length > 1) {
-      const interval = setInterval(() => {
-        setFadeClass('fade-out');
-        setTimeout(() => {
-          setCurrentImageIndex((prev) => (prev + 1) % recipe.images.length);
-          setFadeClass('fade-in');
-        }, 300);
-      }, 5000);
+    const interval = setInterval(() => {
+      setFadeClass('fade-out');
+      setTimeout(() => {
+        setCurrentImageIndex((prev) => (prev + 1) % recipe.images.length);
+        setFadeClass('fade-in');
+      }, 300);
+    }, 1000);
 
-      return () => clearInterval(interval);
-    }
+    return () => clearInterval(interval);
   }, [recipe.images.length]);
 
   const handleFavoriteClick = (e) => {
     e.stopPropagation();
-    onToggleFavorite(recipe.id);
   };
 
   return (
