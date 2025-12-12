@@ -17,9 +17,7 @@ function RecipeCard({ recipe, isFavorite, onToggleFavorite, onClick }) {
     return () => clearInterval(interval);
   }, [recipe.images.length]);
 
-  const handleFavoriteClick = (e) => {
-    e.stopPropagation();
-  };
+  const handleFavoriteClick = () => onToggleFavorite(recipe.id);
 
   return (
     <div className="recipe-card" onClick={onClick}>
